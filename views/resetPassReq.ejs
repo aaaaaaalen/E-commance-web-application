@@ -1,0 +1,34 @@
+<%- include('partials/header') %>
+
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body">
+            <h1 class="text-center mb-3">
+                <i class="fas fa-key"></i> Reset
+            </h1>
+            <%- include ('./partials/messages') %>
+            <form action="/auth/resetPassReq" method="POST">
+                <div class="form-group">
+                    <label for="email">Enter your email</label>
+                    <input
+                        type="text"
+                        id="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="Enter your email"
+                        value="<%= typeof email != 'undefined' ? email : '' %>"
+                    />
+                </div>
+                <hr>
+                <button type="submit" class="btn btn-primary btn-block">
+                    Reset
+                </button>
+            </form>
+            <p class="lead mt-4">
+                Back to <a href="/auth/login">Login</a> page
+            </p>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

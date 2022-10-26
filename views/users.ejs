@@ -1,0 +1,350 @@
+<%- include('partials/header') %>
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/">SellPhone</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse d-flex justify-content-between">
+				<ul class="nav nav-tabs me-auto" id="nav">
+					<li class="nav-item">
+						<a class="nav-link active" data-bs-toggle="tab" href="#profile" data-toggle="tab">
+							Edit profile
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-bs-toggle="tab" href="#changePass" data-toggle="tab">Change password</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-bs-toggle="tab" href="#manageList" data-toggle="tab">Manage listings</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-bs-toggle="tab" href="#comment" data-toggle="tab">View comments</a>
+					</li>
+				</ul>
+				<a 
+				href="/auth/logout" 
+				class="btn btn-secondary" 
+				role="button" 
+				aria-pressed="true"
+				onclick="if (confirm('Are you sure you want to log out?')){ clearCache(); return true;}else{event.stopPropagation(); event.preventDefault();};"
+				>Logout
+				</a>
+			</div>
+		</div>
+	</nav>
+	<%- include ('./partials/messages') %>
+
+		<section id="mainpage-body">
+			<div class="container px-5 px-md-2 py-3">
+				<div id="myTabContent" class="tab-content">
+					<div class="tab-pane fade" id="comment">
+						<h3 class="text-center text-capitalize mb-5">My phone listings comments</h3>
+						<ul class="list-group">
+							<% for(let i=0; i<phones.length; i++) {%>
+								<% let phone =phones[i] %>
+								<% if(phone.reviews != '') {%>
+									<li class="list-group-item">
+										<h5 class="mt-3 text-center fw-bold">Reviews for "<%- phone.title %>"</h5>
+										<hr>
+										<div class="row my-3">
+											<div class="col-12 col-lg-3 text-center">
+												<% let imgPath = "" %>
+												<% if (phone.image.includes("http")) { %>
+													<% imgPath=phone.image %>
+												<% } else { %>
+													<% imgPath="/img/".concat(phone.brand, ".jpeg" ) %>
+												<% } %>
+												 <img src="<%- imgPath %>" 
+												 	alt="<%- phone.brand %> Phone"
+													class="w-75">
+											</div>
+											<div class="col-12 col-lg-9 px-3 d-flex lead flex-column justify-content-center">
+												<div class="py-2">
+													<span class="fw-bold">
+														Title: 
+													</span class="fw-bold">
+													<span>
+														<%- phone.title %>
+													</span>
+												</div>
+												<div class="py-2">
+													<span class="fw-bold">
+														Stock: 
+													</span class="fw-bold">
+													<span>
+														<%- phone.stock %>
+													</span>
+												</div>
+												<div class="py-2">
+													<span class="fw-bold">
+														Price: 
+													</span class="fw-bold">
+													<span>
+														$<%- phone.price %>
+													</span>
+												</div>
+											</div>
+										</div>
+										<ol class="list-group list-group-numbered">
+											<% for(let j=0; j<phone.reviews.length; j++) {%>
+												<% let review = phone.reviews[j] %>
+												<hr>
+												<div class="row">
+													<div class="my-3 lead">
+														<span class="fw-bold">
+															Review by:
+														</span> 
+														<span>
+															<%- review.reviewer.firstname %> <%- review.reviewer.lastname %>
+														</span>
+													</div>
+													<p style="color: black;">
+														<%- review.comment %>
+													</p>
+													<p>
+														<span class="fw-bold lead">
+															Rating:
+														</span>
+														<span>
+															<%- review.rating %>/5
+														</span>
+													</p>
+												</div>
+											<% } %>
+										</ol>
+									</li>
+								<% } %>
+							<% } %>
+						</ul>	
+					</div>
+					<div class="tab-pane fade active show" id="profile">
+						<form action="/users/updateProfile" class="form-horizontal" role="form" method="post">
+							<div class="form-group my-3">
+								<label for="firstname" class="col-sm-2 control-label">Firstname:</label>
+								<div class="col-sm-10">
+									<input 
+									type="text" 
+									id="firstname" 
+									name="firstname" 
+									class="form-control"
+									placeholder="Enter First Name" 
+									value="<%= user.firstname %>" required />
+								</div>
+							</div>
+							<div class="form-group my-3">
+								<label for="lastname" class="col-sm-2 control-label">Lastname:</label>
+								<div class="col-sm-10">
+									<input 
+									type="text" 
+									id="lastname" 
+									name="lastname" 
+									class="form-control"
+									placeholder="Enter Last Name" 
+									value="<%= user.lastname %>" required />
+								</div>
+							</div>
+							<div class="form-group my-3">
+								<label for="email" class="col-sm-2 control-label">Email:</label>
+								<h5 class="col-sm-10">
+									<input 
+									type="text" 
+									id="email" 
+									name="email" 
+									class="form-control"
+									placeholder="Enter Email" 
+									value="<%= user.email %>" required />
+								</h5>
+							</div>
+							<div id="confirmPassword" class="form-group" style="display: none;">
+								<label for="password" class="col-sm-5 control-label">Confirm Your Password For Update Profile:</label>
+								<h5 class="col-sm-10">
+									<input 
+									type="password" 
+									id="password" 
+									name="password" 
+									class="form-control"
+									placeholder="Enter Password" required />
+								</h5>
+							</div>
+							<hr>
+							<div class="col-sm-offset-2 col-sm-10">
+								<button id="updateProfileBtn" type="submit" class="btn btn-primary btn-block">Update</button>
+							</div>
+						</form>
+					</div>
+					<div class="tab-pane fade" id="changePass">
+						<form class="form-horizontal" role="form" action="/users/changePassword" method="post">
+							<div class="form-group my-3">
+								<label for="password" class="col-sm-2 control-label">Current password:</label>
+								<div class="col-sm-10">
+									<input 
+									type="password" 
+									id="password" 
+									name="password" 
+									class="form-control"
+									placeholder="Current Password" required />
+								</div>
+							</div>
+							<div class="form-group my-3">
+								<label for="newPassword" class="col-sm-2 control-label">New password:</label>
+								<div class="col-sm-10">
+									<input 
+									type="password" 
+									id="newPassword" 
+									name="newPassword" 
+									class="form-control"
+									placeholder="Enter your new Password" required />
+								</div>
+							</div>
+							<div class="form-group my-3">
+								<label for="conPassword" class="col-sm-2 control-label">Confirm new password:</label>
+								<div class="col-sm-10">
+									<input 
+									type="password" 
+									id="conPassword" 
+									name="conPassword" 
+									class="form-control"
+									placeholder="Confirm your new Password" required />
+								</div>
+							</div>
+							<hr>
+							<div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" class="btn btn-primary btn-block">Update</button>
+							</div>
+						</form>
+					</div>
+					<div class="tab-pane fade" id="manageList">
+						<form class="form-horizontal hide1" role="form" method="post" action="/users/addPhone">
+							<div class="form-group my-3">
+								<label for="title" class="col-sm-2 control-label">Title:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" required name="title">
+								</div>
+							</div>
+							<div class="form-group my-3">
+								<label for="brand" class="col-sm-2 control-label">Brand:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" required name="brand">
+								</div>
+							</div>
+							<div class="form-group my-3">
+								<label for="image" class="col-sm-2 control-label">Image:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" required name="image">
+								</div>
+							</div>
+							<div class="form-group my-3">
+								<label for="stock" class="col-sm-2 control-label">Stock:</label>
+								<div class="col-sm-10">
+									<input type="number" class="form-control" required name="stock">
+								</div>
+							</div>
+							<div class="form-group my-3">
+								<label for="price" class="col-sm-2 control-label">Price:</label>
+								<div class="col-sm-10">
+									<input type="number" step="0.01" class="form-control" required name="price">
+								</div>
+							</div>
+							<hr>
+							<div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" class="btn btn-primary btn-block">Add</button>
+							</div>
+						</form>
+						<div class="my-3">
+							<h3 class="text-center">My Phones</h3>
+
+							<% for(let i=0; i<phones.length; i++) {%>
+								<% let imgPath="" %>
+								<% let item=phones[i] %>
+
+								<% if (i % 6==0) { %>
+								<div class="row my-4 mx-auto">
+								<% } %>
+								<div class="col-xl-2 col-lg-4 col-sm-6 col-xs-12 my-2">
+									<div class="card h-100">
+										<div class="card-header d-lg-flex justify-content-between">
+											<h5>
+												<!-- <%- item.title %> -->
+												<%- item.brand %> Phone
+											</h5>
+											<!-- <button type="button" class="btn-close" aria-label="Close">
+											<span aria-hidden="true"></span>
+										</button> -->
+										</div>
+										<div class="card-body text-center h-100">									
+										<% if (item.image.includes("http")) { %>
+										<% imgPath=item.image %>
+										<% } else { %>
+											<% imgPath="/img/" .concat(item.brand, ".jpeg" ) %>
+										<% } %>
+											<img src="<%- imgPath %>"
+												alt="<%- item.brand %> Phone"
+												class="card-img mx-auto" />
+												<p class="card-text">
+													<%- item.title.substring(0, 100) %>
+													<% if (item.title.length> 100) { %>
+														 ...  
+													<% } %>
+												</p>
+											</div>
+											<div class="card-body text-center">
+												<ul class="list-group list-group-flush">
+													<li class="list-group-item">Brand:
+														<%- item.brand %>
+													</li>
+													<li class="list-group-item">Price: $
+														<%- item.price %>
+													</li>
+													<li class="list-group-item">Stock:
+														<%- item.stock %>
+													</li>
+												</ul>
+											</div>										
+											<div class="card-body text-center">
+												<% if (item.disabled==='') { %>
+													<a style="margin-top: 5px;" href="/users/changePhoneStatus?phoneID=<%- item.id %>&status=disabled" class="btn btn-primary">Disable</a>
+												<% } else {%>
+													<a style="margin-top: 5px;" href="/users/changePhoneStatus?phoneID=<%- item.id %>&status=" class="btn btn-primary">Enable</a>
+												<% } %>
+											</div>
+											<div class="card-body text-center">
+												<a href="/users/deletePhone?phoneID=<%- item.id %>" class="btn btn-primary">Delete</a>
+											</div>
+										</div>
+								</div>
+
+								<% if ((i+1) % 6==0) { %>
+								</div>
+								<% } %>
+							<% } %>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</section>
+
+		<script>
+			$(document).ready(function () {
+				$('#nav a').click(function (e) {
+					e.preventDefault();
+					$(this).tab('show');
+				});
+
+				$('#updateProfileBtn').click(function (e) {
+					$('#confirmPassword').show();
+				});
+
+				$("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+					var id = $(e.target).attr("href").substr(1);
+					window.location.hash = id;
+				});
+
+				var hash = window.location.hash;
+				$('#nav a[href="' + hash + '"]').tab('show');
+			})
+		</script>
+
+		<%- include('partials/footer') %>

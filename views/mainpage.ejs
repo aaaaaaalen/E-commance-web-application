@@ -1,0 +1,99 @@
+<%- include('partials/header') %>
+
+<!-- Top Bar only for main page -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">SellPhone</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        </ul>
+        <div id="navbar-search" class="d-flex justify-content-center w-50 mx-auto py-3">
+            <input id="searchBar" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button id="navbar-search-btn" class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
+        </div>
+        <div class="d-flex justify-content-lg-end justify-content-center w-lg-40 w-100 py-3">
+            <a
+            href="/checkout"
+            id="cartHeaderBtn"
+            class="btn btn-info text-nowrap my-2 my-sm-0 mx-1 w-30 w-xxl-20 nav-btn-right"
+            role="button"
+            aria-pressed="true"
+            onclick="cachePageState('/')"
+            >Cart (0)</a>
+            <% if (user) { %>
+                <a href="/users" 
+                    class="btn btn-outline-info w-30 w-xxl-20"
+                    role="button"
+                    aria-pressed="true"
+                </a>
+                <%- user.firstname %>
+                <a
+                href="/auth/logout"
+                class="btn btn-secondary my-2 my-sm-0 mx-1 w-30 w-xxl-20 nav-btn-right"
+                role="button"
+                aria-pressed="true"
+                onclick="if (confirm('Are you sure you want to log out?')){ clearCache(); return true;}else{event.stopPropagation(); event.preventDefault();};"
+                >Logout</a
+                >
+            <% } else { %>
+                <a
+                href="/auth/login"
+                class="btn btn-primary my-2 my-sm-0 mx-1 w-30 w-xxl-20 nav-btn-right"
+                role="button"
+                aria-pressed="true"
+                onclick="clearCache()"
+                >Login</a>
+            <% } %>
+            
+        </div>
+      </div>
+    </div>
+  </nav>
+
+<section id="mainpage-body">
+    <div class="container px-5 px-md-2 py-3">
+        <div class="jumbotron text-center my-5 w-lg-75 w-sm-100 mx-auto">
+            <h1 class="display-4">The SellPhone Marketplace</h1>
+            <p class="lead">
+                Welcome to the SellPhone Marketplace. Check out our best selling
+                and selling out items below, and feel free to search around for
+                a specific phone you'd like to buy.
+            </p>
+        </div>
+
+        <div id="stateContainer">
+            <%- include('partials/state_home') %>
+            <%- include('partials/state_item') %>
+            <%- include('partials/state_search') %>
+        </div>
+            
+    </div>
+</section>
+
+<!-- We must inline this script to access ejs values -->
+<script>
+    var user = '<%- JSON.stringify(user) %>';
+    // Not logged in
+    if (user.length === 0) {
+        user = null;
+    } else {
+        user = JSON.parse(user);
+    }
+    var activePhone = null;  // used in itemState
+    var currentState = "home";  // can be "home", "item", or "search"
+    var searchTerm = "";   // used in search
+    var brandFilter = null;   // used in search
+    var priceFilter = null;  // used in search
+</script>
+
+
+<script src="/js/commonSPA.js"></script>
+<script src="/js/homeSPA.js"></script>
+<script src="/js/itemSPA.js"></script>
+<script src="/js/searchSPA.js"></script>
+
+<%- include('partials/footer') %>
+ 

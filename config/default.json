@@ -1,0 +1,4 @@
+{
+    "mongoBaseURI": "mongodb://localhost:27017/",
+    "mongoDBName": "phoneWeb"
+}

@@ -1,0 +1,91 @@
+<%- include('partials/header') %>
+        <div class="container my-5 mx-auto">
+            <div class="card-head">
+                <h2 class="text-center">
+                    Shopping Cart                    
+                </h2>
+                <div id="cart-ticker" class="text-center my-3 pt-3 px-3"> 
+                    <div id="msgLine1" class="lead fw-bold"></div>
+                    <div id="msgLine2" class="fst-italic"></div>
+                </div>
+            </div>
+            <div class="card-body text-center">
+                <ul class="list-group">
+                    <li class="list-group-item row d-none d-lg-flex justify-content-between">
+                        <div class="fw-bold col-lg-1"></div>
+                        <div class="fw-bold col-lg-1">Qty</div>
+                        <div class="fw-bold col-lg-6">Product</div>
+                        <div class="fw-bold col-lg-2">Price/Unit</div>
+                        <div class="fw-bold col-lg-2">Total Price</div>
+                    </li>
+                    <!-- Actual items here -->
+                    <div id="cartList">
+
+                    </div>
+                </ul>
+            </div>
+            <div class="card-footer border border-1 py-4 px-5">
+                <div class="row lead" name="grandTotal">
+                    <div class="col-12 col-lg-6 justify-content-start d-flex fw-bold">
+                        Cart Grand Total:
+                    </div>
+                    <div class="col-12 col-lg-6 justify-content-end d-flex fw-bold">
+                        <span>
+                            $
+                        </span>
+                        <span id="grandTotalFigure">
+                            0.00
+                        </span>
+                    </div>
+                </div>
+                <div class="row lead" name="selectedTotal">
+                    <div class="col-12 col-lg-6 justify-content-start d-flex fw-bold">
+                        Selected Total (to pay):
+                    </div>
+                    <div class="col-12 col-lg-6 justify-content-end d-flex fw-bold">
+                        <span>
+                            $
+                        </span>
+                        <span id="selectedTotalFigure">
+                            0.00
+                        </span>
+                    </div>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <a
+                    href="/"
+                    class="btn btn-success btn-block"
+                    role="button"
+                    aria-pressed="true"
+                    onclick="return redirectBack()"
+                    >
+                    Go Back
+                    </a>
+                    <button
+                    id="payBtn"
+                    class="btn btn-danger btn-block"
+                    role="button"
+                    aria-pressed="true"
+                    >
+                    Confirm & Pay
+                    </button>
+                </div>                               
+            </div>
+        </div>
+    </div>
+<!-- We must inline this script to access ejs values -->
+<script>
+    var user = '<%- JSON.stringify(user) %>';
+    // Not logged in
+    if (user.length === 0) {
+        user = null;
+    } else {
+        user = JSON.parse(user);
+    }
+</script>
+
+<script src="/js/redirect.js"></script>
+<script src="/js/checkout.js"></script>
+        
+<%- include('partials/footer') %>

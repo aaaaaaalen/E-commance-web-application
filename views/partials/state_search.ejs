@@ -1,0 +1,25 @@
+<div class="row py-3" id="searchContainer">
+
+        <div id="homeBtn" class="btn btn-outline-dark mb-5 text-start px-xl-4 px-sm-5 py-xl-2 py-sm-3 col-6 col-md-4 col-lg-3 col-xl-2">
+            <i class="fas fa-angle-double-left"></i> Back to Home
+        </div>
+        <div class="row bg-light p-3 justify-content-center align-items-center">
+            <div class="col-lg-6 col-md-12 py-3">
+                <label for="brands" class="d-flex">Brand</label>
+                <select class="form-select" aria-label="Select Brand" id="brandChoice">
+                    <option value="" selected>No Brand</option>
+                </select>
+            </div>
+            <div class="col-lg-6 col-md-12 py-3">
+                <label for="price-slider">Max Price</label>
+                <div class="d-flex flex-row">
+                    <input type="range" class="form-range w-90" min="0" step="10" id="maxPriceSlider">
+                    <div class="w-10 px-3" id="sliderTooltip">$</div>
+                </div>
+            </div>
+        </div>
+
+    <div id="searchResultsGrid">
+
+    </div>
+</div>
